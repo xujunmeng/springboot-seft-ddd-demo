@@ -1,13 +1,21 @@
-package com.ddd.domain;
+package com.ddd.domain.account.model;
 
-import com.ddd.strategy.CreditPolicy;
-import com.ddd.strategy.DebitPolicy;
+import com.ddd.domain.account.model.strategy.CreditPolicy;
+import com.ddd.domain.account.model.strategy.DebitPolicy;
+import com.ddd.domain.account.repository.AccountRepository;
+import com.ddd.infrastructure.db.mapper.AccountMapper;
+import com.ddd.infrastructure.db.model.AccountPO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * 账户业务对象
  * @author james
  * @date 2020/4/16
  */
+@Component
 public class AccountBO {
 
     /**
@@ -35,6 +43,12 @@ public class AccountBO {
      */
     private CreditPolicy creditPolicy;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountMapper accountMapper = null;
+
     /**
      * 出借方法
      *
@@ -53,6 +67,29 @@ public class AccountBO {
         creditPolicy.preCredit(this, amount);
         this.balance += amount;
         creditPolicy.afterCredit(this, amount);
+    }
+
+    public void updateAccount() {
+        accountRepository.updateAccount(this);
+    }
+
+    public AccountBO getAccountById(String accountId) {
+        return accountRepository.getByAccountId(accountId);
+    }
+
+    public AccountBO(AccountPO accountPO) {
+        this.setAccountId(accountPO.getAccountId());
+        this.setBalance(accountPO.getBalance());
+        this.setFrozen(accountPO.isFrozen());
+    }
+
+    public void save() {
+        AccountPO accountPO = new AccountPO();
+        accountPO.setAccountId(this.getAccountId());
+        accountPO.setBalance(this.getBalance());
+        accountPO.setFrozen(this.isFrozen());
+        accountPO.setCreateDt(new Date());
+        accountMapper.updateAccount(accountPO);
     }
 
     /**
@@ -97,4 +134,6 @@ public class AccountBO {
     public void setCreditPolicy(CreditPolicy creditPolicy) {
         this.creditPolicy = creditPolicy;
     }
+
+
 }

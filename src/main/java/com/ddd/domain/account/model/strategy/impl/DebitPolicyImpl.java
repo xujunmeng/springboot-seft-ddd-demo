@@ -1,13 +1,12 @@
-package com.ddd.strategy.impl;
+package com.ddd.domain.account.model.strategy.impl;
 
-import com.ddd.domain.AccountBO;
-import com.ddd.strategy.DebitPolicy;
+import com.ddd.domain.account.model.AccountBO;
+import com.ddd.domain.account.model.strategy.DebitPolicy;
 import org.springframework.stereotype.Service;
 
 /**
- * 出借策略实现
  * @author james
- * @date 2020/4/16
+ * @date 2020/4/17
  */
 @Service
 public class DebitPolicyImpl implements DebitPolicy {

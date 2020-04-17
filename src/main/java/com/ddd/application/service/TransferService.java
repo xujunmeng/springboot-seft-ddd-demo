@@ -1,4 +1,4 @@
-package com.ddd.service;
+package com.ddd.application.service;
 
 /**
  * Created by james on 2020/4/16.
